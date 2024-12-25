@@ -1,0 +1,137 @@
+#pragma version =0.4.4;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "APSL_TactApsl.headers.fc";
+#include "APSL_TactApsl.stdlib.fc";
+#include "APSL_TactApsl.constants.fc";
+#include "APSL_TactApsl.storage.fc";
+
+;;
+;; Contract TactApsl functions
+;;
+
+(int, int, int, int, slice, slice, slice) $TactApsl$_contract_init() impure inline_ref {
+    var (($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer)) = (null(), null(), null(), null(), __gen_slice_address_a99d0f6201371b8ca809349e947847144d216bc707a5a67599d5eb1793f7b5c2(), __gen_slice_address_a99d0f6201371b8ca809349e947847144d216bc707a5a67599d5eb1793f7b5c2(), __gen_slice_address_bc3527a09d04bf1dcfd14c550dadc5f4270f2bd95dcd669f995f2ea6a53ce287());
+    $self'PaymentNum = 0;
+    $self'EndNum = 0;
+    $self'customerAmount = 0;
+    $self'dealerGuarantee = 0;
+    return ($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer);
+}
+
+;;
+;; Receivers of a Contract TactApsl
+;;
+
+((int, int, int, int, slice, slice, slice), ()) $TactApsl$_internal_text_4e2040d906aa9dffcdca5968f31bfec7e1eb1f779d5bea9a32b2fb6523b5d9e2((int, int, int, int, slice, slice, slice) $self) impure inline {
+    var ($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer) = $self;
+    if (( __tact_slice_eq_bits($self'dealer, __tact_context_get_sender()) )) {
+        $self'PaymentNum = ($self'PaymentNum + 1);
+        $self'dealerGuarantee = ($global_myBalance() - $self'customerAmount);
+    } elseif (( __tact_slice_eq_bits($self'customer, __tact_context_get_sender()) )) {
+        $self'PaymentNum = ($self'PaymentNum + 1);
+        $self'customerAmount = ($global_myBalance() - $self'dealerGuarantee);
+    } else {
+        __tact_nop();
+    }
+    return (($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer), ());
+}
+
+((int, int, int, int, slice, slice, slice), ()) $TactApsl$_internal_text_d3c1e4b157f21488ceecd081f84da46d61bb4edbba7ac22872c550cf311dab8f((int, int, int, int, slice, slice, slice) $self) impure inline {
+    var ($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer) = $self;
+    if (( __tact_slice_eq_bits($self'dealer, __tact_context_get_sender()) )) {
+        $self'EndNum = ($self'EndNum + 1);
+    } elseif (( __tact_slice_eq_bits($self'customer, __tact_context_get_sender()) )) {
+        $self'EndNum = ($self'EndNum + 1);
+    } else {
+        __tact_nop();
+    }
+    if (($self'EndNum == 2)) {
+        $global_send($SendParameters$_constructor_to_bounce_value_mode($self'dealer, true, (($self'dealerGuarantee + ($self'customerAmount - ($self'customerAmount / 20))) - $Context$_get_value(__tact_context_get())), 66));
+        $global_send($SendParameters$_constructor_to_bounce_value_mode($self'owner, true, 0, 130));
+    }
+    return (($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer), ());
+}
+
+(((int, int, int, int, slice, slice, slice)), ()) $TactApsl$_internal_binary_Deploy((int, int, int, int, slice, slice, slice) $self, (int) $deploy) impure inline {
+    var ($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer)~$TactApsl$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'PaymentNum, $self'EndNum, $self'customerAmount, $self'dealerGuarantee, $self'owner, $self'dealer, $self'customer), ());
+}
+
+;;
+;; Get methods of a Contract TactApsl
+;;
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract TactApsl
+;;
+
+((int, int, int, int, slice, slice, slice), int) $TactApsl$_contract_router_internal((int, int, int, int, slice, slice, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$TactApsl$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "Payment" message
+        if (text_op == 0x4e2040d906aa9dffcdca5968f31bfec7e1eb1f779d5bea9a32b2fb6523b5d9e2) {
+            self~$TactApsl$_internal_text_4e2040d906aa9dffcdca5968f31bfec7e1eb1f779d5bea9a32b2fb6523b5d9e2();
+            return (self, true);
+        }
+        
+        ;; Receive "End" message
+        if (text_op == 0xd3c1e4b157f21488ceecd081f84da46d61bb4edbba7ac22872c550cf311dab8f) {
+            self~$TactApsl$_internal_text_d3c1e4b157f21488ceecd081f84da46d61bb4edbba7ac22872c550cf311dab8f();
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $TactApsl$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$TactApsl$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $TactApsl$_contract_store(self);
+}

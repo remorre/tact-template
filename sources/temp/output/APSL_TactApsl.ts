@@ -464,128 +464,112 @@ function dictValueParserFactoryDeploy(): DictionaryValue<FactoryDeploy> {
     }
 }
 
-export type Add = {
-    $$type: 'Add';
-    amount: bigint;
-}
-
-export function storeAdd(src: Add) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(2278832834, 32);
-        b_0.storeUint(src.amount, 32);
-    };
-}
-
-export function loadAdd(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2278832834) { throw Error('Invalid prefix'); }
-    let _amount = sc_0.loadUintBig(32);
-    return { $$type: 'Add' as const, amount: _amount };
-}
-
-function loadTupleAdd(source: TupleReader) {
-    let _amount = source.readBigNumber();
-    return { $$type: 'Add' as const, amount: _amount };
-}
-
-function loadGetterTupleAdd(source: TupleReader) {
-    let _amount = source.readBigNumber();
-    return { $$type: 'Add' as const, amount: _amount };
-}
-
-function storeTupleAdd(source: Add) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.amount);
-    return builder.build();
-}
-
-function dictValueParserAdd(): DictionaryValue<Add> {
-    return {
-        serialize: (src, builder) => {
-            builder.storeRef(beginCell().store(storeAdd(src)).endCell());
-        },
-        parse: (src) => {
-            return loadAdd(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type SampleTactContract$Data = {
-    $$type: 'SampleTactContract$Data';
+export type TactApsl$Data = {
+    $$type: 'TactApsl$Data';
+    PaymentNum: bigint;
+    EndNum: bigint;
+    customerAmount: bigint;
+    dealerGuarantee: bigint;
     owner: Address;
-    counter: bigint;
+    dealer: Address;
+    customer: Address;
 }
 
-export function storeSampleTactContract$Data(src: SampleTactContract$Data) {
+export function storeTactApsl$Data(src: TactApsl$Data) {
     return (builder: Builder) => {
         let b_0 = builder;
+        b_0.storeUint(src.PaymentNum, 8);
+        b_0.storeUint(src.EndNum, 8);
+        b_0.storeCoins(src.customerAmount);
+        b_0.storeCoins(src.dealerGuarantee);
         b_0.storeAddress(src.owner);
-        b_0.storeUint(src.counter, 32);
+        b_0.storeAddress(src.dealer);
+        let b_1 = new Builder();
+        b_1.storeAddress(src.customer);
+        b_0.storeRef(b_1.endCell());
     };
 }
 
-export function loadSampleTactContract$Data(slice: Slice) {
+export function loadTactApsl$Data(slice: Slice) {
     let sc_0 = slice;
+    let _PaymentNum = sc_0.loadUintBig(8);
+    let _EndNum = sc_0.loadUintBig(8);
+    let _customerAmount = sc_0.loadCoins();
+    let _dealerGuarantee = sc_0.loadCoins();
     let _owner = sc_0.loadAddress();
-    let _counter = sc_0.loadUintBig(32);
-    return { $$type: 'SampleTactContract$Data' as const, owner: _owner, counter: _counter };
+    let _dealer = sc_0.loadAddress();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _customer = sc_1.loadAddress();
+    return { $$type: 'TactApsl$Data' as const, PaymentNum: _PaymentNum, EndNum: _EndNum, customerAmount: _customerAmount, dealerGuarantee: _dealerGuarantee, owner: _owner, dealer: _dealer, customer: _customer };
 }
 
-function loadTupleSampleTactContract$Data(source: TupleReader) {
+function loadTupleTactApsl$Data(source: TupleReader) {
+    let _PaymentNum = source.readBigNumber();
+    let _EndNum = source.readBigNumber();
+    let _customerAmount = source.readBigNumber();
+    let _dealerGuarantee = source.readBigNumber();
     let _owner = source.readAddress();
-    let _counter = source.readBigNumber();
-    return { $$type: 'SampleTactContract$Data' as const, owner: _owner, counter: _counter };
+    let _dealer = source.readAddress();
+    let _customer = source.readAddress();
+    return { $$type: 'TactApsl$Data' as const, PaymentNum: _PaymentNum, EndNum: _EndNum, customerAmount: _customerAmount, dealerGuarantee: _dealerGuarantee, owner: _owner, dealer: _dealer, customer: _customer };
 }
 
-function loadGetterTupleSampleTactContract$Data(source: TupleReader) {
+function loadGetterTupleTactApsl$Data(source: TupleReader) {
+    let _PaymentNum = source.readBigNumber();
+    let _EndNum = source.readBigNumber();
+    let _customerAmount = source.readBigNumber();
+    let _dealerGuarantee = source.readBigNumber();
     let _owner = source.readAddress();
-    let _counter = source.readBigNumber();
-    return { $$type: 'SampleTactContract$Data' as const, owner: _owner, counter: _counter };
+    let _dealer = source.readAddress();
+    let _customer = source.readAddress();
+    return { $$type: 'TactApsl$Data' as const, PaymentNum: _PaymentNum, EndNum: _EndNum, customerAmount: _customerAmount, dealerGuarantee: _dealerGuarantee, owner: _owner, dealer: _dealer, customer: _customer };
 }
 
-function storeTupleSampleTactContract$Data(source: SampleTactContract$Data) {
+function storeTupleTactApsl$Data(source: TactApsl$Data) {
     let builder = new TupleBuilder();
+    builder.writeNumber(source.PaymentNum);
+    builder.writeNumber(source.EndNum);
+    builder.writeNumber(source.customerAmount);
+    builder.writeNumber(source.dealerGuarantee);
     builder.writeAddress(source.owner);
-    builder.writeNumber(source.counter);
+    builder.writeAddress(source.dealer);
+    builder.writeAddress(source.customer);
     return builder.build();
 }
 
-function dictValueParserSampleTactContract$Data(): DictionaryValue<SampleTactContract$Data> {
+function dictValueParserTactApsl$Data(): DictionaryValue<TactApsl$Data> {
     return {
         serialize: (src, builder) => {
-            builder.storeRef(beginCell().store(storeSampleTactContract$Data(src)).endCell());
+            builder.storeRef(beginCell().store(storeTactApsl$Data(src)).endCell());
         },
         parse: (src) => {
-            return loadSampleTactContract$Data(src.loadRef().beginParse());
+            return loadTactApsl$Data(src.loadRef().beginParse());
         }
     }
 }
 
- type SampleTactContract_init_args = {
-    $$type: 'SampleTactContract_init_args';
-    owner: Address;
+ type TactApsl_init_args = {
+    $$type: 'TactApsl_init_args';
 }
 
-function initSampleTactContract_init_args(src: SampleTactContract_init_args) {
+function initTactApsl_init_args(src: TactApsl_init_args) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeAddress(src.owner);
     };
 }
 
-async function SampleTactContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECEAEAArIAART/APSkE/S88sgLAQIBYgIDAtTQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxa2zzy4ILI+EMBzH8BygBZWSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssfye1UDQQCAVgLDAPg7aLt+wGSMH/gcCHXScIflTAg1wsf3iCCEIfUOsK6jpUw0x8BghCH1DrCuvLggdMfATHbPH/gIIIQlGqYtrqOqDDTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J+EIBcG3bPH/gwACRMOMNcAYIBQNs+QGC8MT41yMS7f3vW3vseDO9uxYtFRG9eKkSrtDyY3r2VXKuuo+Ocds8iPhCAX9t2zx/2zHgBgcIACT4QW8kECNfAyOBEU0CxwXy9KAAHgAAAABpbmNyZW1lbnRlZAE8bW0ibrOZWyBu8tCAbyIBkTLiECRwAwSAQlAj2zwwCQHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wgKAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAhG5oY2zzbPGwhgNDgARuCvu1E0NIAAYAcDtRNDUAfhj0gABjiX6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdMfWWwS4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwPAAIgAAJw');
-    const __system = Cell.fromBase64('te6cckECEgEAArwAAQHAAQEFoebTAgEU/wD0pBP0vPLICwMCAWIEDALU0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8Wts88uCCyPhDAcx/AcoAWVkg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbLH8ntVA4FA+Dtou37AZIwf+BwIddJwh+VMCDXCx/eIIIQh9Q6wrqOlTDTHwGCEIfUOsK68uCB0x8BMds8f+AgghCUapi2uo6oMNMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8n4QgFwbds8f+DAAJEw4w1wBwkGA2z5AYLwxPjXIxLt/e9be+x4M727Fi0VEb14qRKu0PJjevZVcq66j45x2zyI+EIBf23bPH/bMeAHCAkAJPhBbyQQI18DI4ERTQLHBfL0oAAeAAAAAGluY3JlbWVudGVkATxtbSJus5lbIG7y0IBvIgGRMuIQJHADBIBCUCPbPDAKAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7CAsAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwCAVgNEQIRuaGNs82zxsIYDhABwO1E0NQB+GPSAAGOJfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0x9ZbBLg+CjXCwqDCbry4In6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdHbPA8AAnAAAiAAEbgr7tRNDSAAGLwv97A=');
+async function TactApsl_init() {
+    const __code = Cell.fromBase64('te6ccgECDwEAA+cAART/APSkE/S88sgLAQIBYgIDA37QAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFts88uCC2zwEBQYAEaGFfdqJoaQAAwI07UTQ1AH4Y9IAAeMCMPgo1wsKgwm68uCJ2zwHCAKg7aLt+wGSMH/gcCHXScIflTAg1wsf3iCCEJRqmLa6jqgw0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yfhCAXBt2zx/4MAAkTDjDXAJCgH0yPhDAcx/AcoAVWBQZ8sHFMsHWPoCAfoCASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbIWCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFskBzMkOAObTB9MH+gD6APpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHUAdD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMRcWFRRDMGwXAOSNCGAFfSyAuFvYLWCx7kTvWavaIDfAL7NBgyXbKOQfhXxB/xyNCGAFfSyAuFvYLWCx7kTvWavaIDfAL7NBgyXbKOQfhXxB/xyNCGAHZ8bBj24Wj1/E+0cpy3ZFXuX4UcmXbVKRz4KdT74TBgxwVHAAVSMBPG1tIm6zmVsgbvLQgG8iAZEy4hAkcAMEgEJQI9s8MAwB+vkBIILwTiBA2Qaqnf/Nyllo8xv+x+HrH3edW+qaMrL7ZSO12eK6ji8w+EJSIMcFmTMFpPgnbxAkoY4W+EJSEMcFmTQFpPgnbxAjoZJQZOIEA+JQY3/bMeCC8NPB5LFX8hSIzuzQgfhNpG1hu07bunrCKHLFUM8xHauPuuMCCwKe+EJSIMcFkgWknPhCUhDHBZIFpJEF4uIgwAKPLn8lgBSpBFJgoVJQoPhBbyQTXwOhI1mAQhAjbW1t2zwwIn9wgQCCECNtbW3bPDDeBX/bMQwMAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7CA0AmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwABO1U');
+    const __system = Cell.fromBase64('te6cckECEQEAA/EAAQHAAQEFofQVAgEU/wD0pBP0vPLICwMCAWIEEAN+0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRbbPPLggts8BQgOAjTtRNDUAfhj0gAB4wIw+CjXCwqDCbry4InbPAYHAObTB9MH+gD6APpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHUAdD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMRcWFRRDMGwXAOSNCGAFfSyAuFvYLWCx7kTvWavaIDfAL7NBgyXbKOQfhXxB/xyNCGAFfSyAuFvYLWCx7kTvWavaIDfAL7NBgyXbKOQfhXxB/xyNCGAHZ8bBj24Wj1/E+0cpy3ZFXuX4UcmXbVKRz4KdT74TBgxwVHAAVSMCoO2i7fsBkjB/4HAh10nCH5UwINcLH94gghCUapi2uo6oMNMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8n4QgFwbds8f+DAAJEw4w1wCQoBPG1tIm6zmVsgbvLQgG8iAZEy4hAkcAMEgEJQI9s8MAwB+vkBIILwTiBA2Qaqnf/Nyllo8xv+x+HrH3edW+qaMrL7ZSO12eK6ji8w+EJSIMcFmTMFpPgnbxAkoY4W+EJSEMcFmTQFpPgnbxAjoZJQZOIEA+JQY3/bMeCC8NPB5LFX8hSIzuzQgfhNpG1hu07bunrCKHLFUM8xHauPuuMCCwKe+EJSIMcFkgWknPhCUhDHBZIFpJEF4uIgwAKPLn8lgBSpBFJgoVJQoPhBbyQTXwOhI1mAQhAjbW1t2zwwIn9wgQCCECNtbW3bPDDeBX/bMQwMAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7CA0AmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwB9Mj4QwHMfwHKAFVgUGfLBxTLB1j6AgH6AgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WyFgg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbJAczJDwAE7VQAEaGFfdqJoaQAA9BXP6I=');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initSampleTactContract_init_args({ $$type: 'SampleTactContract_init_args', owner })(builder);
+    initTactApsl_init_args({ $$type: 'TactApsl_init_args' })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
 
-const SampleTactContract_errors: { [key: number]: { message: string } } = {
+const TactApsl_errors: { [key: number]: { message: string } } = {
     2: { message: `Stack underflow` },
     3: { message: `Stack overflow` },
     4: { message: `Integer overflow` },
@@ -622,10 +606,9 @@ const SampleTactContract_errors: { [key: number]: { message: string } } = {
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
     137: { message: `Masterchain support is not enabled for this contract` },
-    4429: { message: `Invalid sender` },
 }
 
-const SampleTactContract_types: ABIType[] = [
+const TactApsl_types: ABIType[] = [
     {"name":"StateInit","header":null,"fields":[{"name":"code","type":{"kind":"simple","type":"cell","optional":false}},{"name":"data","type":{"kind":"simple","type":"cell","optional":false}}]},
     {"name":"StdAddress","header":null,"fields":[{"name":"workchain","type":{"kind":"simple","type":"int","optional":false,"format":8}},{"name":"address","type":{"kind":"simple","type":"uint","optional":false,"format":256}}]},
     {"name":"VarAddress","header":null,"fields":[{"name":"workchain","type":{"kind":"simple","type":"int","optional":false,"format":32}},{"name":"address","type":{"kind":"simple","type":"slice","optional":false}}]},
@@ -634,47 +617,44 @@ const SampleTactContract_types: ABIType[] = [
     {"name":"Deploy","header":2490013878,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"DeployOk","header":2952335191,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"FactoryDeploy","header":1829761339,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"cashback","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"Add","header":2278832834,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"SampleTactContract$Data","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"counter","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
+    {"name":"TactApsl$Data","header":null,"fields":[{"name":"PaymentNum","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"EndNum","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"customerAmount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"dealerGuarantee","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"dealer","type":{"kind":"simple","type":"address","optional":false}},{"name":"customer","type":{"kind":"simple","type":"address","optional":false}}]},
 ]
 
-const SampleTactContract_getters: ABIGetter[] = [
-    {"name":"counter","arguments":[],"returnType":{"kind":"simple","type":"int","optional":false,"format":257}},
+const TactApsl_getters: ABIGetter[] = [
 ]
 
-export const SampleTactContract_getterMapping: { [key: string]: string } = {
-    'counter': 'getCounter',
+export const TactApsl_getterMapping: { [key: string]: string } = {
 }
 
-const SampleTactContract_receivers: ABIReceiver[] = [
-    {"receiver":"internal","message":{"kind":"typed","type":"Add"}},
-    {"receiver":"internal","message":{"kind":"text","text":"increment"}},
+const TactApsl_receivers: ABIReceiver[] = [
+    {"receiver":"internal","message":{"kind":"text","text":"Payment"}},
+    {"receiver":"internal","message":{"kind":"text","text":"End"}},
     {"receiver":"internal","message":{"kind":"typed","type":"Deploy"}},
 ]
 
-export class SampleTactContract implements Contract {
+export class TactApsl implements Contract {
     
-    static async init(owner: Address) {
-        return await SampleTactContract_init(owner);
+    static async init() {
+        return await TactApsl_init();
     }
     
-    static async fromInit(owner: Address) {
-        const init = await SampleTactContract_init(owner);
+    static async fromInit() {
+        const init = await TactApsl_init();
         const address = contractAddress(0, init);
-        return new SampleTactContract(address, init);
+        return new TactApsl(address, init);
     }
     
     static fromAddress(address: Address) {
-        return new SampleTactContract(address);
+        return new TactApsl(address);
     }
     
     readonly address: Address; 
     readonly init?: { code: Cell, data: Cell };
     readonly abi: ContractABI = {
-        types:  SampleTactContract_types,
-        getters: SampleTactContract_getters,
-        receivers: SampleTactContract_receivers,
-        errors: SampleTactContract_errors,
+        types:  TactApsl_types,
+        getters: TactApsl_getters,
+        receivers: TactApsl_receivers,
+        errors: TactApsl_errors,
     };
     
     private constructor(address: Address, init?: { code: Cell, data: Cell }) {
@@ -682,13 +662,13 @@ export class SampleTactContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: Add | 'increment' | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: 'Payment' | 'End' | Deploy) {
         
         let body: Cell | null = null;
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Add') {
-            body = beginCell().store(storeAdd(message)).endCell();
+        if (message === 'Payment') {
+            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
         }
-        if (message === 'increment') {
+        if (message === 'End') {
             body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
@@ -698,13 +678,6 @@ export class SampleTactContract implements Contract {
         
         await provider.internal(via, { ...args, body: body });
         
-    }
-    
-    async getCounter(provider: ContractProvider) {
-        let builder = new TupleBuilder();
-        let source = (await provider.get('counter', builder.build())).stack;
-        let result = source.readBigNumber();
-        return result;
     }
     
 }

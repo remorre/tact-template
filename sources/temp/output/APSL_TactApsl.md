@@ -1,9 +1,9 @@
 # TACT Compilation Report
-Contract: SampleTactContract
-BOC Size: 702 bytes
+Contract: TactApsl
+BOC Size: 1011 bytes
 
 # Types
-Total Types: 10
+Total Types: 9
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -37,18 +37,12 @@ Signature: `DeployOk{queryId:uint64}`
 TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
-## Add
-TLB: `add#87d43ac2 amount:uint32 = Add`
-Signature: `Add{amount:uint32}`
-
-## SampleTactContract$Data
+## TactApsl$Data
 TLB: `null`
 Signature: `null`
 
 # Get Methods
-Total Get Methods: 1
-
-## counter
+Total Get Methods: 0
 
 # Error Codes
 2: Stack underflow
@@ -87,15 +81,14 @@ Total Get Methods: 1
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
-4429: Invalid sender
 
 # Trait Inheritance Diagram
 
 ```mermaid
 graph TD
-SampleTactContract
-SampleTactContract --> BaseTrait
-SampleTactContract --> Deployable
+TactApsl
+TactApsl --> BaseTrait
+TactApsl --> Deployable
 Deployable --> BaseTrait
 ```
 
@@ -103,5 +96,5 @@ Deployable --> BaseTrait
 
 ```mermaid
 graph TD
-SampleTactContract
+TactApsl
 ```
