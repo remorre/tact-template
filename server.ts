@@ -40,32 +40,32 @@ app.post('/compile', async (req: any, res: any) => {
 			try {
 				// Динамический импорт модуля
 				const modulePath = `./sources/temp/output/APSL_TactApsl.ts`;
-				const { APSL_TactApsl } = await import(modulePath);
+				const { TactApsl } = await import(modulePath);
 
-				// Вызов функции createAmm
-				const result = async () => {
-					let init = await APSL_TactApsl.init();
+				const initResult = await TactApsl.init();
 
+				const result = () => {
 					return {
-						code: init.code,
-						data: init.data,
+						code: initResult.code.toBoc().toString('base64'),
+						data: initResult.data.toBoc().toString('base64'),
 					};
 				};
-				res.json({ result });
+				const m = result();
+				console.log(m);
+				res.json(m);
+				fs.rm(sourcesPath, { recursive: true, force: true }, err => {
+					if (err) {
+						console.error('Error deleting sources folder:', err);
+					} else {
+						console.log('Sources folder deleted successfully');
+					}
+				});
 			} catch (importError) {
 				console.error(`Error importing module: ${importError}`);
 				res.status(500).json({ error: 'Failed to import module' });
 			}
 		},
 	);
-
-	fs.rm(sourcesPath, { recursive: true, force: true }, err => {
-		if (err) {
-			console.error('Error deleting sources folder:', err);
-		} else {
-			console.log('Sources folder deleted successfully');
-		}
-	});
 });
 
 app.listen(port, () => {
